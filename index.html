@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <title>TV Ratings</title>
+  <style>
+    .stars-outer{
+      position: relative;
+      display: inline-block;
+    }
+    .stars-inner{
+      position: absolute;
+      top:0;
+      left: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+    }
+    .stars-outer::before{
+      content: "\f005 \f005 \f005 \f005 \f005"; /* Font Awesome stuff*/
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      color:#ccc;
+    }
+    .stars-inner::before{
+      content: "\f005 \f005 \f005 \f005 \f005"; /* Font Awesome stuff*/
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      color: #fff616;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-group">
+      <select class="form-control custom-select" id ="product-select">
+        <option value="0" disabled selected>Select Product</option>
+        <option value="sony">Sony 4K TV</option>
+        <option value="samsung">Samsung 4K TV</option>
+        <option value="mi">MI 4K TV</option>
+        <option value="panasonic">Panasonic 4K TV</option>
+        <option value="philips">Philips 4K TV</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <input type="number" id="rating-control" class="form-control" step ="0.1" max ="5" placeholder="Rating 1-5" disabled>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>4K Television</th>
+          <th>Ratings</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class ="sony">
+          <td>SONY 4K TV</td>
+          <td>
+            <div class="stars-outer">
+              <div class="stars-inner"></div>
+            </div>
+            <span class="number-rating"></span>
+          </td>
+        </tr>
+        <tr class ="samsung">
+          <td>Samsung 4K TV</td>
+          <td>
+            <div class="stars-outer">
+              <div class="stars-inner"></div>
+            </div>
+            <span class="number-rating"></span>
+          </td>
+        </tr>
+        <tr class ="mi">
+          <td>MI 4K TV</td>
+          <td>
+            <div class="stars-outer">
+              <div class="stars-inner"></div>
+            </div>
+            <span class="number-rating"></span>
+          </td>
+        </tr>
+        <tr class ="panasonic">
+          <td>Panasonic 4K TV</td>
+          <td>
+            <div class="stars-outer">
+              <div class="stars-inner"></div>
+            </div>
+            <span class="number-rating"></span>
+          </td>
+        </tr>
+        <tr class ="philips">
+          <td>Philips 4K TV</td>
+          <td>
+            <div class="stars-outer">
+              <div class="stars-inner"></div>
+            </div>
+            <span class="number-rating"></span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <script>
+  // Initial Ratings
+const ratings = {
+  sony: 4.5,
+  samsung: 4.3,
+  mi: 4.9,
+  panasonic: 4.1,
+  philips: 3.9
+};
+// Total Ratings
+const starsTotal = 5.0;
+
+//run getRating() when DOM load
+document.addEventListener("DOMContentLoaded", getRating);
+
+// Form elements
+const productSelect = document.getElementById("product-select");
+const ratingControl = document.getElementById("rating-control");
+
+//init product
+let product;
+
+// product select change
+productSelect.addEventListener('change', (e)=>{
+product = e.target.value;
+// enabling ratings
+ratingControl.disabled =false;
+ratingControl.value = ratings[product];
+});
+
+//Rating control change
+ratingControl.addEventListener('blur',(e)=>{
+  const rating = e.target.value;
+
+  // Make sure rating must not be greater than 5
+  if (rating >5) {
+    alert("Boooo");
+  }
+  //Change rating
+  ratings[product] = rating;
+  getRating(); //to make changes in rating
+
+})
+
+
+// Get Ratings
+function getRating() {
+  for (let rating in ratings) {
+    // get percentage ratings
+    const starPercentage = ratings[rating] / starsTotal * 100;
+    const starPercentageRounded = `${Math.round(starPercentage / 10) * 10}%`;
+
+    // set width of stars-inner to percentage
+    document.querySelector(
+      `.${rating} .stars-inner`
+    ).style.width = starPercentageRounded;
+
+    //Add number ratings
+    document.querySelector(
+      `.${rating} .number-rating`
+    ).innerHTML = ratings[rating];
+  }
+}
+</script>
+
+</body>
+</html>
